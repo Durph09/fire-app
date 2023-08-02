@@ -10,12 +10,20 @@ import debounce from 'lodash.debounce';
 export default function Enter(props) {
   const { user, username } = useContext(UserContext);
 
+  console.log('enter 13 user: ', user);
+  console.log('enter 13 username: ', username);
+  if(user) {
+    console.log("User is true");
+} else {
+    console.log("User is not true");
+}
+
   // 1. user signed out <SignInButton />
   // 2. user signed in, but missing username <UsernameForm />
   // 3. user signed in, has username <SignOutButton />
   return (
     <main>
-     
+      
       {user ? !username ? <UsernameForm /> : <SignOutButton /> : <SignInButton />}
     </main>
   );
