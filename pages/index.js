@@ -7,17 +7,24 @@ import PostFeed from "@/components/PostFeed";
 
 
 //Max post to query er page
-const LIMIT = 1;
+const LIMIT = 10;
 
 export async function getServerSideProps(context) {
-  const allPosts = firebaseQuery (collectionGroup(firestore, 'posts' ), where('published', '==', true), orderBy("createdAT", 'desc'), limit(LIMIT))
-  const posts = ((await getDocs(allPosts)).docs.map(postToJSON));
-  console.log("posts: ", posts)
-  return {
-    props: { posts }, // will be passed to the page components as props
-  }
+  const ref = collectionGroup(getFirestore(), 'posts');
+  const postsQuery = firebaseQuery(
+    ref,
+    where('published', '==', true),
+    orderBy('createdAT', 'desc'),
+    limit(LIMIT),
+  )
 
+  const posts = (await getDocs(postsQuery)).docs.map(postToJSON);
+ 
+  return {
+    props: { posts }, // will be passed to the page component as props
+  };
 }
+
 
 export default function Home(props) {
 const [posts, setPosts] = useState(props.posts); // props rendered on the server are the initial value.  Set as state so that you can get more posts later

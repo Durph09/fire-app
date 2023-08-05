@@ -36,7 +36,9 @@ function PostManager() {
     "posts",
     slug
   );
+  console.log("PostManager js 39 postRefz: ", postRef)
   const [post] = useDocumentDataOnce(postRef);
+  console.log("PostManager js 40 post: ", post)
 
   return (
     <main className={styles.container}>
@@ -69,18 +71,18 @@ function PostManager() {
 }
 
 function PostForm({ defaultValues, postRef, preview }) {
-  const { register, errors, handleSubmit, formState, reset, watch } = useForm({
+  const { register, handleSubmit, formState, reset, watch } = useForm({
     defaultValues,
     mode: "onChange",
   });
 
-  const { isValid, isDirty } = formState;
+  const { isValid, isDirty, errors } = formState;
 
   const updatePost = async ({ content, published }) => {
     await updateDoc(postRef, {
       content,
       published,
-      updatedAT: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     });
     reset({ content, published });
 
@@ -101,13 +103,13 @@ function PostForm({ defaultValues, postRef, preview }) {
          <textarea
           name="content"
           {...register("content", {
-            maxLength: { value: 20000, message: 'content is too long' },
-            minLength: { value: 10, message: 'content is too short' },
+            maxLength: 20000, message: 'content is too long' },
+            {minLength: { value: 10, message: 'content is too short' },
             required: { value: true, message: 'content is required' },
           })}
         ></textarea>
 
-        {errors.content && (
+        {errors?.content && (
           <p className="text-danger">{errors.content.message}</p>
         )}
 
@@ -116,7 +118,7 @@ function PostForm({ defaultValues, postRef, preview }) {
             className={styles.checkbox}
             name="published"
             type="checkbox"
-            ref={register}
+            {...register('published', {required: true})}
           />
           <label>Published</label>
         </fieldset>
