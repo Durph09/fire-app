@@ -35,5 +35,5 @@ yarn-error.log*
 next-env.d.ts
 
 # ignore this page
-firebase.js
-firestore.rules
+lib/firebase.js
+/firestore.rules 
